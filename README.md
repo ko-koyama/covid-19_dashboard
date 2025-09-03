@@ -1,12 +1,63 @@
-# React + Vite
+# COVID-19 Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+神奈川県のCOVID-19感染者データを可視化するダッシュボードアプリケーションです。  
+Vite + Reactで構築され、Claude Codeの練習プロジェクトとして作成されています。
 
-Currently, two official plugins are available:
+## 機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 神奈川県のCOVID-19感染者データの可視化
+- 感染者数の推移グラフ
+- 年代別感染者数の月次バーチャート
+- 死亡者数データの表示
+- インタラクティブな日付スライダー
+- KPI（主要指標）カードの表示
 
-## Expanding the ESLint configuration
+## 技術スタック
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19.1.1
+- Vite 7.1.2
+- Recharts (データ可視化)
+- D3-DSV (CSVデータ処理)
+- date-fns (日付処理)
+
+## セットアップ
+
+### 前提条件
+- Node.js (推奨: 18以上)
+- npm または yarn
+
+### インストール
+```bash
+# リポジトリをクローン
+git clone <repository-url>
+
+# ディレクトリに移動
+cd covid-19_dashboard
+
+# 依存関係をインストール
+npm install
+```
+
+### 開発サーバーの起動
+```bash
+npm run dev
+```
+
+### ビルド
+```bash
+npm run build
+```
+
+### リント
+```bash
+npm run lint
+```
+
+### プレビュー
+```bash
+npm run preview
+```
+
+## データソース
+
+神奈川県が公開するCOVID-19オープンデータを使用しています。
