@@ -1,8 +1,11 @@
-import Dashboard from './components/dashboard/Dashboard'
-import './App.css'
+import Dashboard from './components/Dashboard'
 
 function App() {
-  return <Dashboard />
+  return (
+    <div style={{ width: '100%', minHeight: '100vh' }}>
+      <Dashboard />
+    </div>
+  )
 }
 
 export default App

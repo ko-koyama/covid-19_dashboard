@@ -3,7 +3,7 @@ import { parseISO, format } from 'date-fns';
 
 export async function loadInfectionTrendData() {
   try {
-    const response = await fetch('/src/data/01_kansensyasuu_suii.csv');
+    const response = await fetch('/data/01_kansensyasuu_suii.csv');
     const text = await response.text();
     const data = csvParse(text);
     
@@ -42,7 +42,7 @@ export async function loadInfectionTrendData() {
 
 export async function loadAgeGroupData() {
   try {
-    const response = await fetch('/src/data/02_kansensyasuu_nendaibetsu.csv');
+    const response = await fetch('/data/02_kansensyasuu_nendaibetsu.csv');
     const text = await response.text();
     const data = csvParse(text);
     
@@ -86,7 +86,7 @@ export async function loadAgeGroupData() {
 
 export async function loadDeathData() {
   try {
-    const response = await fetch('/src/data/07_shibousyasuu.csv');
+    const response = await fetch('/data/07_shibousyasuu.csv');
     const text = await response.text();
     const data = csvParse(text);
     

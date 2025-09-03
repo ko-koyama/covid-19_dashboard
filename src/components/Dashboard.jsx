@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useCovidData } from '../../hooks/useCovidData';
-import KPICard from '../common/KPICard';
-import DateSlider from '../common/DateSlider';
-import InfectionTrendChart from '../charts/InfectionTrendChart';
-import AgeGroupBarChartMonthly from '../charts/AgeGroupBarChartMonthly';
+import { useCovidData } from '../lib/useCovidData';
+import KPICard from './KPICard';
+import DateSlider from './DateSlider';
+import InfectionTrendChart from './InfectionTrendChart';
+import AgeGroupBarChartMonthly from './AgeGroupBarChartMonthly';
 import { 
   getDataByDateIndex, 
   getDataRangeByDateIndex, 
   getCumulativeDataByDateIndex,
   getAgeGroupDataByDateIndex 
-} from '../../utils/dataParser';
+} from '../lib/dataParser';
 import { format } from 'date-fns';
-import '../../styles/components/Dashboard.css';
+import '../styles.css';
 
 function Dashboard() {
   const { infectionTrend, ageGroup, deaths, latest, ageGroupTotals, loading, error } = useCovidData();

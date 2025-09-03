@@ -1,4 +1,4 @@
-import '../../styles/components/KPICard.css';
+import '../styles.css';
 
 function KPICard({ title, value, subtitle, trend }) {
   return (

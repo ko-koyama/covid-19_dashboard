@@ -5,7 +5,7 @@ import {
   loadDeathData,
   getLatestData,
   calculateTotalsByAgeGroup
-} from '../utils/dataParser';
+} from './dataParser';
 
 export function useCovidData() {
   const [data, setData] = useState({

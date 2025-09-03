@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import '../../styles/components/DateSlider.css';
+import '../styles.css';
 
 function DateSlider({ dates, selectedIndex, onChange }) {
   const handleSliderChange = (event) => {
