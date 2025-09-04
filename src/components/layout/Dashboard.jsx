@@ -13,11 +13,11 @@ import '../../styles.css';
 
 function Dashboard() {
   const { infectionTrend, deaths, cumulativeCases, loading, error } = useCovidData();
-  const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+  const [selectedDateIndex, setSelectedDateIndex] = useState(null);
 
   // Initialize to 2022/04/01
   useEffect(() => {
-    if (infectionTrend.length > 0) {
+    if (infectionTrend.length > 0 && selectedDateIndex === null) {
       const targetDate = '2022/4/1';
       const targetIndex = infectionTrend.findIndex(item => item.dateString === targetDate);
       if (targetIndex !== -1) {
@@ -26,7 +26,7 @@ function Dashboard() {
         setSelectedDateIndex(infectionTrend.length - 1);
       }
     }
-  }, [infectionTrend]);
+  }, [infectionTrend, selectedDateIndex]);
 
   if (loading) {
     return (
@@ -42,6 +42,16 @@ function Dashboard() {
       <div className="dashboard-error">
         <h2>エラーが発生しました</h2>
         <p>{error}</p>
+      </div>
+    );
+  }
+
+  // Wait for data initialization
+  if (selectedDateIndex === null) {
+    return (
+      <div className="dashboard-loading">
+        <div className="loading-spinner"></div>
+        <p>データを読み込み中...</p>
       </div>
     );
   }
