@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 
 function InfectionTrendChart({ data }) {
   const chartData = data.map(item => ({
-    date: format(item.date, 'MM/dd'),
+    date: format(item.date, 'yyyy/MM/dd'),
     cases: item.newCases,
     average: Math.round(item.weeklyAverage || 0)
   }));
@@ -11,9 +11,9 @@ function InfectionTrendChart({ data }) {
   // データ数に応じて適切な間隔を計算
   const getTickInterval = (dataLength) => {
     if (dataLength <= 7) return 0; // 7日以下なら全て表示
-    if (dataLength <= 14) return 1; // 14日以下なら1つおきに表示
     if (dataLength <= 30) return Math.floor(dataLength / 7); // 30日以下なら約7つの目盛り
-    return Math.floor(dataLength / 10); // それ以上なら約10個の目盛り
+    if (dataLength <= 365) return Math.floor(dataLength / 12); // 1年以下なら約12個の目盛り
+    return Math.floor(dataLength / 15); // それ以上なら約15個の目盛り
   };
 
   return (
@@ -53,10 +53,10 @@ function InfectionTrendChart({ data }) {
                   }}>
                     <p style={{ margin: '0 0 5px 0', color: '#e0e0e0' }}>日付：{label}</p>
                     {casesData && (
-                      <p style={{ margin: '0 0 5px 0', color: '#ff6b6b' }}>新規感染者数：{casesData.value}</p>
+                      <p style={{ margin: '0 0 5px 0', color: '#ff6b6b' }}>新規感染者数：{casesData.value.toLocaleString()}人</p>
                     )}
                     {averageData && (
-                      <p style={{ margin: 0, color: '#4ecdc4' }}>7日間平均：{averageData.value}</p>
+                      <p style={{ margin: 0, color: '#4ecdc4' }}>30日間平均：{averageData.value.toLocaleString()}人</p>
                     )}
                   </div>
                 );

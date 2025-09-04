@@ -3,24 +3,28 @@ import { useCovidData } from '../../hooks/useCovidData';
 import KPICard from '../ui/KPICard';
 import DateSlider from '../ui/DateSlider';
 import InfectionTrendChart from '../charts/InfectionTrendChart';
-import AgeGroupBarChartMonthly from '../charts/AgeGroupBarChartMonthly';
+import JapanMapFixed from '../charts/JapanMapFixed';
+import PrefectureRanking from '../charts/PrefectureRanking';
 import { 
   getDataByDateIndex, 
-  getDataRangeByDateIndex, 
-  getCumulativeDataByDateIndex,
-  getAgeGroupDataByDateIndex 
+  getPrefectureDataByDateIndex
 } from '../../utils/dataParser';
-import { format } from 'date-fns';
 import '../../styles.css';
 
 function Dashboard() {
-  const { infectionTrend, ageGroup, deaths, latest, ageGroupTotals, loading, error } = useCovidData();
+  const { infectionTrend, deaths, cumulativeCases, loading, error } = useCovidData();
   const [selectedDateIndex, setSelectedDateIndex] = useState(0);
 
-  // Initialize to latest data
+  // Initialize to 2022/04/01
   useEffect(() => {
     if (infectionTrend.length > 0) {
-          setSelectedDateIndex(infectionTrend.length - 1);
+      const targetDate = '2022/4/1';
+      const targetIndex = infectionTrend.findIndex(item => item.dateString === targetDate);
+      if (targetIndex !== -1) {
+        setSelectedDateIndex(targetIndex);
+      } else {
+        setSelectedDateIndex(infectionTrend.length - 1);
+      }
     }
   }, [infectionTrend]);
 
@@ -43,18 +47,20 @@ function Dashboard() {
   }
 
   // Get data for selected date
-  const selectedInfectionData = getCumulativeDataByDateIndex(infectionTrend, selectedDateIndex);
-  const selectedDeathData = getCumulativeDataByDateIndex(deaths, selectedDateIndex);
-  const selectedAgeData = getDataByDateIndex(ageGroup, selectedDateIndex);
-  const trendData = getDataRangeByDateIndex(infectionTrend, selectedDateIndex, 30);
-  const ageGroupMonthlyData = getDataRangeByDateIndex(ageGroup, selectedDateIndex, 30);
+  const selectedInfectionData = getDataByDateIndex(infectionTrend, selectedDateIndex);
+  const selectedDeathData = getDataByDateIndex(deaths, selectedDateIndex);
+  const trendData = infectionTrend.slice(0, selectedDateIndex + 1);
+  const prefectureData = getPrefectureDataByDateIndex(infectionTrend, selectedDateIndex);
+
+  const selectedDateStr = selectedInfectionData?.dateString;
+  const selectedCumulativeCasesData = cumulativeCases.find(item => item.dateString === selectedDateStr);
 
   const dates = infectionTrend.map(item => item.date);
-  const selectedDate = selectedInfectionData?.dateString || '';
+  
   const currentCases = selectedInfectionData?.newCases || 0;
-  const cumulativeCases = selectedInfectionData?.cumulativeCases || 0;
-  const cumulativeDeaths = selectedDeathData?.cumulativeDeaths || 0;
-  const weeklyAverage = selectedInfectionData?.weeklyAverage || 0;
+  const totalCumulativeCases = selectedCumulativeCasesData?.cumulativeCases || 0;
+  const cumulativeDeaths = selectedDeathData?.deaths || 0;
+
 
   return (
     <div className="dashboard">
@@ -70,12 +76,12 @@ function Dashboard() {
 
       <div className="kpi-grid-three">
         <KPICard
-          title="累計感染者数"
-          value={cumulativeCases}
+          title="新規感染者数"
+          value={currentCases}
         />
         <KPICard
-          title="当日新規感染者数"
-          value={currentCases}
+          title="累計感染者数"
+          value={totalCumulativeCases}
         />
         <KPICard
           title="累計死亡者数"
@@ -84,14 +90,25 @@ function Dashboard() {
       </div>
 
       <div className="trend-chart-container">
-        <h2>新規感染者数推移（直近30日間）</h2>
+        <h2>新規感染者数推移</h2>
         <InfectionTrendChart data={trendData} />
       </div>
 
-      <div className="age-chart-container">
-        <h2>年代別合計感染者数（直近30日間）</h2>
-        <AgeGroupBarChartMonthly data={ageGroupMonthlyData} />
+      <div className="prefecture-section">
+        <div className="prefecture-section-card">
+          <h2>都道府県別新規感染者数</h2>
+          <div className="prefecture-container">
+            <div className="prefecture-heatmap-container">
+              <JapanMapFixed data={prefectureData} />
+            </div>
+            
+            <div className="prefecture-ranking-container">
+              <PrefectureRanking data={prefectureData} />
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   );
 }

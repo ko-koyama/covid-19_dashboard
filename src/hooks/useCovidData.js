@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { 
   loadInfectionTrendData, 
-  loadAgeGroupData, 
   loadDeathData,
-  getLatestData,
-  calculateTotalsByAgeGroup
+  loadCumulativeCasesData,
+  getLatestData
 } from '../utils/dataParser';
 
 export function useCovidData() {
   const [data, setData] = useState({
     infectionTrend: [],
-    ageGroup: [],
     deaths: [],
+    cumulativeCases: [],
     loading: true,
     error: null
   });
@@ -21,16 +20,16 @@ export function useCovidData() {
       try {
         setData(prev => ({ ...prev, loading: true }));
         
-        const [infectionTrend, ageGroup, deaths] = await Promise.all([
+        const [infectionTrend, deaths, cumulativeCases] = await Promise.all([
           loadInfectionTrendData(),
-          loadAgeGroupData(),
-          loadDeathData()
+          loadDeathData(),
+          loadCumulativeCasesData()
         ]);
 
         setData({
           infectionTrend,
-          ageGroup,
           deaths,
+          cumulativeCases,
           loading: false,
           error: null
         });
@@ -49,15 +48,11 @@ export function useCovidData() {
 
   const latest = {
     infections: getLatestData(data.infectionTrend),
-    ageGroup: getLatestData(data.ageGroup),
     deaths: getLatestData(data.deaths)
   };
 
-  const ageGroupTotals = calculateTotalsByAgeGroup(data.ageGroup);
-
   return {
     ...data,
-    latest,
-    ageGroupTotals
+    latest
   };
 }
